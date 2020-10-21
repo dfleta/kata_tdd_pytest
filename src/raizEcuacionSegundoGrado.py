@@ -31,7 +31,7 @@ def raiz_ecuacion_segundo_grado(a, b, c):
         return None
   
 
-if __name__ == "_main__":
+if __name__ == "__main__":
 
     x, y = raiz_ecuacion_segundo_grado(1, 1, 0)
     assert x == 0

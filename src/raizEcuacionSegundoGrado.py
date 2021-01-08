@@ -6,9 +6,10 @@ def raiz_ecuacion_segundo_grado(a, b, c):
     
     if a == 0:
         return None
-
+        
     if b == c == 0:
         return 0
+
     
     if c == 0:
         x = 0

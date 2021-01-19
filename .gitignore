@@ -1,4 +1,21 @@
+# VSCode
 .vscode
 .cache
-.pytest_cache
+
+# Python
+venv/
 __pycache__
+
+# Pytest
+.pytest_cache
+
+# Tox
+.tox/
+square_root_testing.egg-info
+
+# Wheel
+build/
+
+# Coverage
+.coverage
+coverage_annotation/

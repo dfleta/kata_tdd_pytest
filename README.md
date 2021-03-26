@@ -490,15 +490,60 @@ deps =
 ```
 
 
-## Githooks para disparar tox pre-commit en el master
+## Githooks para disparar tox / pre-commit en el master
 
 ### pre-commit
 
 https://pre-commit.com/ 
 
-Supported hooks:
+```bash
+#instalacion:
+$ pip3 install pre-commit
+
+$ pip3 list | grep commit
+pre-commit (2.11.1)
+
+$ pre-commit --version
+pre-commit 2.11.1
+```
+
+Crear el fichero de configuración:
+
+`$ pre-commit sample-config > .pre-commit-config.yaml`
+
+Buscar cada hook de python aquí, Supported hooks:
 
 https://pre-commit.com/hooks.html
+
+
+Incluir el hook de `black` (y los deseados) en `.pre-commit-config.yaml`
+
+
+```yaml
+# https://github.com/psf/black#version-control-integration 
+repos:
+  - repo: https://github.com/psf/black
+    rev: 20.8b1
+    hooks:
+      - id: black
+        language_version: python3
+
+# https://github.com/PyCQA/bandit#version-control-integration
+repos:
+-   repo: https://github.com/PyCQA/bandit
+    rev: 1.7.0
+    hooks:
+        - id: bandit
+```
+
+Instalarlos:
+
+```bash
+$ pre-commit install
+pre-commit installed at .git/hooks/pre-commit
+```
+
+`pre-commit` will run automatically on git commit!
 
 
 ## YAML

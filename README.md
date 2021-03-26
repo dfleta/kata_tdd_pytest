@@ -55,6 +55,9 @@ Una vez creados los `markers` y registrados en `pytest.ini` , obtenemos una list
 
 ## TOX
 
+![Tox flow](./tox_flow.png)
+
+
 Workflow de Tox:
 
 https://tox.readthedocs.io/en/latest/index.html
@@ -126,7 +129,7 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     Crea un directorio `.tox` bajo el cual encontramos los entornos virtuales indicados en la envlist del tox.ini (py36) y un egg de distrbución (leer más adelante);
 
     ```bash
-    # -l 2 para najar solo 2 niveles
+    # -l 2 para bajar solo 2 niveles
     $ tree -L 2 .tox
     .tox
     ├── dist
@@ -172,6 +175,9 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     congratulations :)
    
     ```
+
+Se instalan en el entorno virtual las dependencias del `requirements.txt` y todas aquellas dependendencias que indice en la sección `deps = ` del `tox.ini`  
+Entiendo que se copian los ficheros de configuración de las herramientas, y los usa tox => ¿cómo se copiarían los ficheros de configuración de coverage y black al entorno virtual de prueba?
 
 
 ## Dist
@@ -279,10 +285,6 @@ exclude = '''
 '''
 ```
 
-## Githooks para disparar tox pre-commit en el master
-
-...
-
 ## Coverage
 
 https://coverage.readthedocs.io/en/latest
@@ -344,7 +346,9 @@ Coverage status for each line of source is indicated with a character prefix:
 Si seguimos este flujo de trabajo:
 
 `$ pytest -m b_nulo`
+
 `$ coverage run --source ./src -m pytest -m b_nulo`
+
 `$ coverage annotate -d ./coverage_annotation`
 
 conseguimos ver en las anotaciones del código sólo el **backward slice** del código que ha sido ejecutado para pasar el caso test del marker indicado.
@@ -355,8 +359,6 @@ Es mejor esto que el report, ya que leo si se ha cubierto el código que estoy t
 
 https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
 
-
-## OJO QUE SE COPIA AL ENTORNO VIRTUAL LAS DEP DEL REQUIREMENTS.TXT PERO NO LOS FICHEROS de conifguración de las  herramientas, y los uso en tox => copiar los ficheros de configuración de coverage y black al entorno virtual de prueba y depliegue cómo ???
 
 ### eggs
 
@@ -385,3 +387,122 @@ Specifically: The Internal Structure of Python Eggs: http://svn.python.org/proje
     The .egg format is well-suited to distribution and the easy uninstallation or upgrades of code, since the project is essentially self-contained within a single directory or file, unmingled with any other projects' code or resources. It also makes it possible to have multiple versions of a project simultaneously installed, such that individual programs can select the versions they wish to use.
 
 
+## Bandit
+
+Es conveniente integrar en el ciclo CI cuanto antes cuestiones sobre la seguridad de las aplicaciones. De DevOps hay que evolucionar a SecDevOps.
+
+Bandit realiza un análisis **estático**  del código en busca de vulnerabilidades:
+
+https://pypi.org/project/bandit/
+
+https://bandit.readthedocs.io/en/latest/config.html
+
+```bash
+# install
+$ pip3 install bandit
+
+#run
+S bandit -r path/to/your/code
+# Across the examples/ directory, showing three lines of context and only reporting on the high-severity issues:
+$ bandit examples/*.py -n 3 -lll
+
+# Nuesto caso:
+$ bandit -r ./src/ ./test
+# informa de la presencia de assert que eliminarán código cuando se ejecute en producción
+
+$ bandit -r[main]  INFO    profile include tests: None
+[main]  INFO    profile exclude tests: None
+[main]  INFO    cli include tests: None
+[main]  INFO    cli exclude tests: None
+[main]  INFO    running on Python 3.6.9
+Run started:2021-03-26 13:09:52.411873
+
+Test results:
+        No issues identified.
+
+Code scanned:
+        Total lines of code: 25
+        Total lines skipped (#nosec): 0
+
+Run metrics:
+        Total issues (by severity):
+                Undefined: 0.0
+                Low: 0.0
+                Medium: 0.0
+                High: 0.0
+        Total issues (by confidence):
+                Undefined: 0.0
+                Low: 0.0
+                Medium: 0.0
+                High: 0.0
+Files skipped (0): ./src/
+```
+
+### Configuracion
+
+Para generar un fichero de configuración (no es necesario):
+
+`$ bandit-config-generator -o .bandit`
+
+Para usarlo:
+
+`$ bandit-c .bandit`
+
+
+La lista de test que pasa bandit para chequear vulnerabilidades es esta: muy educativo para aprender las vulnerabilidades en código Python: 
+
+https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing
+
+En el archivo de configuración se pueden excluir los casos test por su etiqueta.
+
+### Actualizar tox.ini
+
+Comprobar que bandot está instalado (obviamente)
+
+```bash
+$ pip3 show bandit
+Name: bandit
+Version: 1.7.0
+Summary: Security oriented static analyser for python code.
+Home-page: https://bandit.readthedocs.io/en/latest/
+Author: PyCQA
+Author-email: code-quality@python.org
+License: UNKNOWN
+Location: /home/david/Escritorio/codigo/square_test/venv/lib/python3.6/site-packages
+Requires: PyYAML, GitPython, six, stevedore
+```
+
+```bash
+$ pip3 freeze | grep bandit
+bandit==1.7.0
+```
+Meter la dependencia a bandit en `tox.ini`:
+
+```
+# ... or install anything else you might need here
+deps = 
+        -rrequirements.txt
+        # Todas las dependencias que no se incluyan en el requirements van aqui
+        # Aqui las dependencias que necesito para CI, no para dev
+        black
+        coverage
+        bandit  <======
+```
+
+
+## Githooks para disparar tox pre-commit en el master
+
+### pre-commit
+
+https://pre-commit.com/ 
+
+Supported hooks:
+
+https://pre-commit.com/hooks.html
+
+
+## YAML
+
+Especificación de YAML:
+
+https://yaml.org/spec/1.2/spec.html

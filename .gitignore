@@ -3,7 +3,7 @@
 .cache
 
 # Python
-venv/
+venv*/
 __pycache__
 
 # Pytest
@@ -19,3 +19,6 @@ build/
 # Coverage
 .coverage
 coverage_annotation/
+
+# Precommit
+config_precommit/*

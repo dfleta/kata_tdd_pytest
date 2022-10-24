@@ -2,6 +2,32 @@
 
 Cómo utilizar `pytest.ini`y los `markers` para configurar los casos test.
 
+## pytest
+
+[Diferencias entre pip y pip3](https://www.pythonpool.com/pip-vs-pip3/#:~:text=PIP%20Vs%20PIP3%20What's%20the%20Difference%3F,-PIP&text=PIP%20is%20a%20soft%20link,in%20the%20system%20PATH%20variable)
+
+(Instalar pytest)[https://docs.pytest.org/en/latest/getting-started.html#install-pytest]
+
+[pip install](https://pip.pypa.io/en/stable/cli/pip_install/)
+
+Instalar pytest:
+
+```bash
+$ pip3 install -U pytest
+$ pytest --version
+pytest 7.1.3
+```
+
+Seleccionar determinados test por nombre del fichero:
+
+```bash
+$ pytest -k "test_b_c_nulo"
+collected 12 items / 11 deselected / 1 selected                                   test/test_b_c_nulo.py .
+```
+
+Invocar pytets como módulo de Python:
+
+`python -m pytest [...]`
 
 ## Trabajar con custom markers
 
@@ -19,11 +45,11 @@ En el raíz del proyecto, situar el fichero `pytest.ini` y escribir nombre del m
 
 ```ini
     [pytest]
-        markers = 
+        markers =
         division_cero: coeficiente a es 0
 ```
 
-En cada módulo /fichero correspondiente a los test de cada módulo `test_xxx.py` importar `pytest` para utilizar los decoradores `@pytest.mark` 
+En cada módulo /fichero correspondiente a los test de cada módulo `test_xxx.py` importar `pytest` para utilizar los decoradores `@pytest.mark`
 
 ```python
 import pytest
@@ -41,7 +67,7 @@ $ pytest -v -m "division_cero"
 platform linux -- Python 3.6.9, pytest-6.1.1, py-1.9.0, pluggy-0.13.1 -- /usr/bin/python3
 cachedir: .pytest_cache
 rootdir: /home/david/Escritorio/Programacion/codigo/square_test, configfile: pytest.ini
-collected 3 items / 2 deselected / 1 selected                                                                      
+collected 3 items / 2 deselected / 1 selected
 
 test/square_root_test.py::test_division_por_cero PASSED                                                      [100%]
 
@@ -80,9 +106,9 @@ https://tox.readthedocs.io/en/latest/example/basic.html
 
 2. Instalamos `pytest` y `tox` (no las `setuptools` que ya han sido instaladas al crear el entorno virtual):
 
-    https://pip.pypa.io/en/stable/reference/pip_install/ 
+    https://pip.pypa.io/en/stable/reference/pip_install/
 
-    https://tox.readthedocs.io/en/latest/ 
+    https://tox.readthedocs.io/en/latest/
 
 
     ```bash
@@ -93,14 +119,14 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     ```
 
 3. Crear `requirements.txt`
-   
+
    `(venv) $ pip3 freeze > requirements.txt`
 
-4. Crear `setup.py`. 
-   Usar como template este: https://github.com/dfleta/api-rest-gildedrose/blob/master/setup.py e incluir las dependencias del fichero `requirements.txt` anterior. 
+4. Crear `setup.py`.
+   Usar como template este: https://github.com/dfleta/api-rest-gildedrose/blob/master/setup.py e incluir las dependencias del fichero `requirements.txt` anterior.
 
    Eliminar la dependencia `pkg-resources==0.0.0` porque es un bug de pip.
-   
+
 5. Crear un fichero `tox.ini` con la configuración en la raíz del proyecto:
 
     ```ini
@@ -111,7 +137,7 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     [testenv]
     # install testing framework
     # ... or install anything else you might need here
-    deps = 
+    deps =
             -rrequirements.txt
     # run the tests
     # ... or run any other command line tool you need to run here
@@ -119,14 +145,14 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     ```
 
 6. Invocar `tox`.
-   
+
    Hace lo que promete:
 
     > 1. Chequea que tu paquete instala correctamente en diferentes versiones de Python e intérpretes.
     > 2. Ejecuta tus tests en cada uno de los entornos, configurando el framework para los test que elijas.
     > 3. Actúa como un frontend para servidores de Continuous Integration, "_greatly reducing boilerplate and merging CI and shell-based testing_". <== siguiente paso en esta práctica.
 
-    Crea un directorio `.tox` bajo el cual encontramos los entornos virtuales indicados en la envlist del tox.ini (py36) y un egg de distrbución (leer más adelante);
+    Crea un directorio `.tox` bajo el cual encontramos los entornos virtuales indicados en la envlist del tox.ini (py36) y un egg de distribución (leer más adelante);
 
     ```bash
     # -l 2 para bajar solo 2 niveles
@@ -135,7 +161,7 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     ├── dist
     │   └── square root testing-0.0.1.zip
     ├── log
-    │   
+    │
     └── py36
         ├── bin
         ├── lib
@@ -151,11 +177,11 @@ https://tox.readthedocs.io/en/latest/example/basic.html
 
     # Crea un entorno virtual para cada uno indicado en la envlist del tox.ini
     py36 inst-nodeps: /square_test/.tox/.tmp/package/1/square root testing-0.0.1.zip
-   
+
     # Instala las dependencias en el entorno virtual indicadas en requirements.txt
-    py36 installed: appdirs==1.4.4,attrs==20.3.0,distlib==0.3.1,filelock==3.0.12,importlib-metadata==2.1.1,importlib-resources==4.1.1,iniconfig==1.1.1,packaging==20.8,pluggy==0.13.1,py==1.10.0,pyparsing==2.4.7,pytest==6.2.1,six==1.15.0,square-root-testing 
+    py36 installed: appdirs==1.4.4,attrs==20.3.0,distlib==0.3.1,filelock==3.0.12,importlib-metadata==2.1.1,importlib-resources==4.1.1,iniconfig==1.1.1,packaging==20.8,pluggy==0.13.1,py==1.10.0,pyparsing==2.4.7,pytest==6.2.1,six==1.15.0,square-root-testing
     py36 run-test-pre: PYTHONHASHSEED='93282115'
-   
+
     # Ejecuta los comandos de la lista commands del tox.ini
     py36 run-test: commands[0] | pytest
 
@@ -163,7 +189,7 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     platform linux -- Python 3.6.9, pytest-6.2.1, py-1.10.0, pluggy-0.13.1
     cachedir: .tox/py36/.pytest_cache
     rootdir: /square_test, configfile: pytest.ini
-    collected 6 tems                                                                                               
+    collected 6 tems
     test/test_ square_root.py [ 16%]
     test/test_b_c_nulo.py     [ 33%]
     test/test_c_nulo.py .     [ 66%]
@@ -173,20 +199,20 @@ https://tox.readthedocs.io/en/latest/example/basic.html
     _____________summary ________________________
     py36: commands succeeded
     congratulations :)
-   
+
     ```
 
-Se instalan en el entorno virtual las dependencias del `requirements.txt` y todas aquellas dependendencias que indice en la sección `deps = ` del `tox.ini`  
+Se instalan en el entorno virtual las dependencias del `requirements.txt` y todas aquellas dependendencias que indice en la sección `deps = ` del `tox.ini`
 Entiendo que se copian los ficheros de configuración de las herramientas, y los usa tox => ¿cómo se copiarían los ficheros de configuración de coverage y black al entorno virtual de prueba?
 
 
 ## Dist
 
-En este artículo se explica bien qué sucede con el estándar mínimo que ha de tener un paquete, y los estándares PEP517 y PEP518, las setuptools y wheel y, sobretodo, el fichero `pyproject.toml` 
+En este artículo se explica bien qué sucede con el estándar mínimo que ha de tener un paquete, y los estándares PEP517 y PEP518, las setuptools y wheel y, sobretodo, el fichero `pyproject.toml`
 
 https://snarky.ca/what-the-heck-is-pyproject-toml/
 
-La idea es usar el fichero `pyproject.toml` para ser utilizado para configurar todas las herramientas como coverage, wheels, tox, etc. 
+La idea es usar el fichero `pyproject.toml` para ser utilizado para configurar todas las herramientas como coverage, wheels, tox, etc.
 
 
 Packaging en Tox y con otras herramientas => añadir  `pyproject.toml` con la configuración (no es necesario):
@@ -206,7 +232,7 @@ https://tox.readthedocs.io/en/latest/example/package.html
 He decido hacerlo de este modo:
 
 1. En `tox.ini` indico un directorio fuera de .tox donde situar el `egg.zip`:
-    
+
     ```ini
     # content of: tox.ini
     [tox]
@@ -230,9 +256,9 @@ He decido hacerlo de este modo:
     En la sección `commands` de tox.ini añadir:
     `wheel setup.py bdtis_wheel`
 
-    Crea un directorio `dist` donde colocal el fichero wheel. 
+    Crea un directorio `dist` donde colocal el fichero wheel.
 
- 
+
 El problema de esta configuración es que si un caso test falla, el empaquetado con wheel se completa de igua modo, no así el que tox crea en `.tox/dist`.
 
 
@@ -240,13 +266,13 @@ El problema de esta configuración es que si un caso test falla, el empaquetado 
 
 Black
 
-https://pypi.org/project/black/ 
+https://pypi.org/project/black/
 
 `$ black [source_file_or_directory]`
 
 Black code style:
 
-https://pypi.org/project/black/ 
+https://pypi.org/project/black/
 
 ### Configuration format
 
@@ -256,7 +282,7 @@ It contains separate sections for different tools. Black is using the [tool.blac
 
 Note that you have to use single-quoted strings in TOML for regular expressions. It's the equivalent of r-strings in Python. Multiline strings are treated as verbose regular expressions by Black. Use [ ] to denote a significant space character.
 
-Ver fichero 
+Ver fichero
 
 ```toml
 [tool.black]
@@ -449,7 +475,7 @@ Para usarlo:
 `$ bandit-c .bandit`
 
 
-La lista de test que pasa bandit para chequear vulnerabilidades es esta: muy educativo para aprender las vulnerabilidades en código Python: 
+La lista de test que pasa bandit para chequear vulnerabilidades es esta: muy educativo para aprender las vulnerabilidades en código Python:
 
 https://bandit.readthedocs.io/en/latest/plugins/index.html#complete-test-plugin-listing
 
@@ -457,7 +483,7 @@ En el archivo de configuración se pueden excluir los casos test por su etiqueta
 
 ### Actualizar tox.ini
 
-Comprobar que bandot está instalado (obviamente)
+Comprobar que bandit está instalado (obviamente)
 
 ```bash
 $ pip3 show bandit
@@ -480,7 +506,7 @@ Meter la dependencia a bandit en `tox.ini`:
 
 ```
 # ... or install anything else you might need here
-deps = 
+deps =
         -rrequirements.txt
         # Todas las dependencias que no se incluyan en el requirements van aqui
         # Aqui las dependencias que necesito para CI, no para dev
@@ -494,7 +520,7 @@ deps =
 
 ### pre-commit
 
-https://pre-commit.com/ 
+https://pre-commit.com/
 
 ```bash
 #instalacion:
@@ -520,7 +546,7 @@ Incluir el hook de `black` (y los deseados) en `.pre-commit-config.yaml`
 
 
 ```yaml
-# https://github.com/psf/black#version-control-integration 
+# https://github.com/psf/black#version-control-integration
 repos:
   - repo: https://github.com/psf/black
     rev: 20.8b1
@@ -543,8 +569,165 @@ $ pre-commit install
 pre-commit installed at .git/hooks/pre-commit
 ```
 
-`pre-commit` will run automatically on git commit!
+`pre-commit` se ejecutará "on" `git commit`
 
+Ejecutarlo contra todos los ficheros:
+
+`$ pre-commit run --all-files`
+
+Para uno (que voy a crear a continuación):
+
+`$ pre-commit run --files ./src/blame.py`
+
+
+Creo un archivo culpable de todas las cosas:
+
+```py
+def blame(curses):
+    assert curses>0
+    msg = "vulture food"
+    return curses *     "te lo dije!"
+    
+
+if __name__ == "__main__":
+    print(blame(2))
+```
+
+Ejecuto los hooks contra él:
+
+```bash
+$ pre-commit run --files ./src/blame.py 
+
+Trim Trailing Whitespace.................................................Passed
+Fix End of Files.........................................................Failed  <====
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing src/blame.py
+
+Check Yaml...........................................(no files to check)Skipped
+Check for added large files..............................................Passed
+black....................................................................Failed   <=====
+- hook id: black
+- files were modified by this hook
+
+reformatted src/blame.py
+All done! ✨ 🍰 ✨
+1 file reformatted.
+
+bandit...................................................................Failed   <=====
+- hook id: bandit
+- exit code: 1
+
+[main]  INFO    profile include tests: None
+[main]  INFO    profile exclude tests: None
+[main]  INFO    cli include tests: None
+[main]  INFO    cli exclude tests: None
+[main]  INFO    running on Python 3.6.9
+Run started:2021-03-26 19:51:01.497333
+
+Test results:
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   Location: src/blame.py:2
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b101_assert_used.html
+1       def blame(curses):
+2           assert curses > 0
+3           msg = "vulture food"
+
+--------------------------------------------------
+
+Code scanned:
+        Total lines of code: 6
+        Total lines skipped (#nosec): 0
+
+Run metrics:
+        Total issues (by severity):
+                Undefined: 0.0
+                Low: 1.0
+                Medium: 0.0
+                High: 0.0
+        Total issues (by confidence):
+                Undefined: 0.0
+                Low: 0.0
+                Medium: 0.0
+                High: 1.0
+Files skipped (0):
+```
+
+El fichero `blame.py` es sí, queda formateado.
+
+
+Si intentamos hacer un commit con él, comprobamos que los hooks se disparan y se detiene el commit de `blame.py`:
+
+```bash
+$ git commit -m "ci(pre-commit): Incluir configuracion pre-commit"
+
+Trim Trailing Whitespace.................................................Failed
+- hook id: trailing-whitespace
+- exit code: 1
+- files were modified by this hook
+
+Fixing README.md
+Fixing src/blame.py
+
+Fix End of Files.........................................................Failed
+- hook id: end-of-file-fixer
+- exit code: 1
+- files were modified by this hook
+
+Fixing README.md
+
+Check Yaml...............................................................Passed
+Check for added large files..............................................Passed
+black....................................................................Failed
+- hook id: black
+- files were modified by this hook
+
+reformatted src/blame.py
+All done! ✨ 🍰 ✨
+1 file reformatted.
+
+bandit...................................................................Failed
+- hook id: bandit
+- exit code: 1
+
+[main]  INFO    profile include tests: None
+[main]  INFO    profile exclude tests: None
+[main]  INFO    cli include tests: None
+[main]  INFO    cli exclude tests: None
+[main]  INFO    running on Python 3.6.9
+Run started:2021-03-26 19:45:16.642375
+
+Test results:
+>> Issue: [B101:assert_used] Use of assert detected. The enclosed code will be removed when compiling to optimised byte code.
+   Severity: Low   Confidence: High
+   Location: src/blame.py:2
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b101_assert_used.html
+1       def blame(curses):
+2           assert curses > 0
+3           msg = "vulture food"
+
+--------------------------------------------------
+
+Code scanned:
+        Total lines of code: 6
+        Total lines skipped (#nosec): 0
+
+Run metrics:
+        Total issues (by severity):
+                Undefined: 0.0
+                Low: 1.0
+                Medium: 0.0
+                High: 0.0
+        Total issues (by confidence):
+                Undefined: 0.0
+                Low: 0.0
+                Medium: 0.0
+                High: 1.0
+Files skipped (0):
+```
 
 ## YAML
 

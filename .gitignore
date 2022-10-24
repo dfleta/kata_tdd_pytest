@@ -19,6 +19,3 @@ build/
 # Coverage
 .coverage
 coverage_annotation/
-
-# Precommit
-config_precommit/*

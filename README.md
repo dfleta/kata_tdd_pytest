@@ -436,7 +436,8 @@ $ bandit examples/*.py -n 3 -lll
 $ bandit -r ./src/ ./test
 # informa de la presencia de assert que eliminarán código cuando se ejecute en producción
 
-$ bandit -r[main]  INFO    profile include tests: None
+$ bandit -r
+[main]  INFO    profile include tests: None
 [main]  INFO    profile exclude tests: None
 [main]  INFO    cli include tests: None
 [main]  INFO    cli exclude tests: None
@@ -656,7 +657,7 @@ Run metrics:
 Files skipped (0):
 ```
 
-El fichero `blame.py` es sí, queda formateado.
+El fichero `blame.py` eso sí, queda formateado.
 
 
 Si intentamos hacer un commit con él, comprobamos que los hooks se disparan y se detiene el commit de `blame.py`:

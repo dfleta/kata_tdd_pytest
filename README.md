@@ -6,7 +6,7 @@ Cómo utilizar `pytest.ini`y los `markers` para configurar los casos test.
 
 [Diferencias entre pip y pip3](https://www.pythonpool.com/pip-vs-pip3/#:~:text=PIP%20Vs%20PIP3%20What's%20the%20Difference%3F,-PIP&text=PIP%20is%20a%20soft%20link,in%20the%20system%20PATH%20variable)
 
-(Instalar pytest)[https://docs.pytest.org/en/latest/getting-started.html#install-pytest]
+[Instalar pytest](https://docs.pytest.org/en/latest/getting-started.html#install-pytest)
 
 [pip install](https://pip.pypa.io/en/stable/cli/pip_install/)
 

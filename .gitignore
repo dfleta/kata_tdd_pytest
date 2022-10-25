@@ -3,7 +3,7 @@
 .cache
 
 # Python
-venv/
+venv*/
 __pycache__
 
 # Pytest

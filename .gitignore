@@ -1,6 +1,7 @@
 # VSCode
 .vscode
 .cache
+*.code-workspace
 
 # Python
 venv*/

@@ -45,7 +45,7 @@ if __name__ == '__main__':
     assert raiz_ecuacion_segundo_grado(1, -1, -2) == (2, -1)
 
     # def test_discriminante_negativo()
-    assert raiz_ecuacion_segundo_grado(1, 1, 1) == None
+    assert raiz_ecuacion_segundo_grado(1, 1, 1) is None
 
     # test_soluciones_fraccion()
     assert raiz_ecuacion_segundo_grado(6, -7, 2) == (2 / 3, 1 / 2)

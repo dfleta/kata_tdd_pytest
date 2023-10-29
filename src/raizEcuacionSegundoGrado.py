@@ -31,3 +31,21 @@ def raiz_ecuacion_segundo_grado(a, b, c):
         return x, y
     else:
         return None
+
+
+if __name__ == '__main__':
+
+    # test_b_nulo_solucion_real():
+    assert raiz_ecuacion_segundo_grado(1, 0, -1) == (1, -1)
+
+    # test_discriminante_cero()
+    assert raiz_ecuacion_segundo_grado(1, 2, 1) == (-1, -1)
+
+    # test_discriminante_positivo()
+    assert raiz_ecuacion_segundo_grado(1, -1, -2) == (2, -1)
+
+    # def test_discriminante_negativo()
+    assert raiz_ecuacion_segundo_grado(1, 1, 1) == None
+
+    # test_soluciones_fraccion()
+    assert raiz_ecuacion_segundo_grado(6, -7, 2) == (2 / 3, 1 / 2)

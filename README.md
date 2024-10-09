@@ -71,6 +71,8 @@ def test_division_por_cero():
     assert raiz_ecuacion_segundo_grado(0, 1, 1) == None
 ```
 
+#### Seleccionar el test por marker
+
 Seleccionar el test o `marker`:
 
 ```bash
@@ -79,7 +81,7 @@ $ pytest -v -m "division_cero"
 platform linux -- Python 3.6.9, pytest-6.1.1, py-1.9.0, pluggy-0.13.1 -- /usr/bin/python3
 cachedir: .pytest_cache
 rootdir: /home/david/Escritorio/Programacion/codigo/square_test, configfile: pytest.ini
-collected 3 items / 2 deselected / 1 selected
+collected 3 items / 2 deselected / 1 selected                                                                      
 
 test/square_root_test.py::test_division_por_cero PASSED                                                      [100%]
 
@@ -90,6 +92,16 @@ test/square_root_test.py::test_division_por_cero PASSED                         
 Una vez creados los `markers` y registrados en `pytest.ini` , obtenemos una lista de ellos:
 
 `$ pytest --markers`
+
+#### Seleccionar el test por nombre
+
+Empleamos `-k` para seleccionar los test según su nombre.
+
+`$ pytest -k "discriminante_cero"`
+
+O a la inversa, ejecutar todos los tests excepto este:
+
+`$ pytest -k "not discriminante_cero"`
 
 
 ## Coverage

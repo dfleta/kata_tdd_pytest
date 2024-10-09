@@ -10,13 +10,25 @@ Cómo utilizar `pytest.ini`y los `markers` para configurar los casos test.
 
 [pip install](https://pip.pypa.io/en/stable/cli/pip_install/)
 
-Instalar pytest:
+Crea un entorno virtual:
+
+`python3 -m venv venv`
+
+y actívalo (este es el comando en Linux / MacOSX):
+
+`source venv/bin/activate`
+
+Instala pytest:
 
 ```bash
-$ pip3 install -U pytest
-$ pytest --version
+(venv) $ pip3 install -U pytest
+(venv) $ pytest --version
 pytest 7.1.3
 ```
+
+Si quieres una salida por consola mejor formateada, instala el paquete `pytest-sugar`.
+
+`(venv) $ pip3 install pytest-sugar`
 
 Seleccionar determinados test por nombre del fichero:
 
@@ -78,6 +90,153 @@ test/square_root_test.py::test_division_por_cero PASSED                         
 Una vez creados los `markers` y registrados en `pytest.ini` , obtenemos una lista de ellos:
 
 `$ pytest --markers`
+
+
+## Coverage
+
+Recuerda tener activado el entorno virtual.
+
+https://coverage.readthedocs.io/en/latest
+
+`$ pip3 install coverage`
+
+`$ coverage run -m pytest`
+
+#### Data file
+Coverage.py collects execution data in a file called “.coverage”
+
+#### Sólo analizar el dir source indicado
+
+`$ coverage run --source ./src -m pytest`
+
+--source creo que se ve sobreescrito por la configuración exclude o include en el fichero de configuración `.coveragerc`
+
+Como invoco coverage llamando al módulo pytest, sólo se analizan los ficheros de código que son ejecutados por los casos test.
+
+#### Excluir líneas de código
+
+https://coverage.readthedocs.io/en/latest/excluding.html
+
+Ver el fichero `.coveragerc`
+
+Puede moverse al fichero de configuración del proyecto `pyproject.toml` si se instala `coverage` de modo:
+
+https://coverage.readthedocs.io/en/latest/config.html#config
+
+`pip install coverage[toml]`
+
+
+##### para ver el report
+
+`$ coverage report`
+
+Para saber qué lineas no se han ejecutado:
+
+`$ coverage report -m`
+
+
+#### Anotar el código
+
+`$ coverage annotate -d ./coverage_annotation`
+
+Antes has de ejecutar:
+
+`$ coverage run --source ./src -m pytest`
+
+Produce un texto anotado del código fuente. Con `-d` especificamos un directorio de salida para el fichero con el código anotado. Sin `-d`, los ficheros anotados son escritos en el directorio original del fichero Python.
+
+Coverage status for each line of source is indicated with a character prefix:
+
+    > executed
+    ! missing (not executed)
+    - excluded
+
+
+Si seguimos este flujo de trabajo:
+
+`$ pytest -m b_nulo`
+
+`$ coverage run --source ./src -m pytest -m b_nulo`
+
+`$ coverage annotate -d ./coverage_annotation`
+
+conseguimos ver en las anotaciones del código sólo el **backward slice** del código que ha sido ejecutado para pasar el caso test del marker indicado.
+
+Es mejor esto que el report, ya que leo si se ha cubierto el código que estoy testeando bajo ese caso test específico.
+
+### Coverage en VSCode
+
+Desde la versión 1.94.0 de VSCode puedes ejecutar las tareas de testing y cobertura de código desde la barra lateral.
+
+Ejecutar Python tests con coverage:
+
+https://code.visualstudio.com/docs/editor/testing#_test-coverage
+
+Información general information sobre test coverage en la documentación sobre VSCode's Test Coverage:
+
+https://code.visualstudio.com/docs/python/testing#_run-tests-with-coverage
+
+**Es necesario instalar la extensión `pytest-cov` de pytest** desde consola:
+
+`(venv) $ pip3 install pytest-cov`
+
+https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
+
+Uso: 
+
+> To run tests with coverage, select the coverage run icon in the Test Explorer or “Run with coverage” from any menu you normally trigger test runs from. The Python extension will run coverage by using the `pytest-cov` plugin if you are using pytest, or with `coverage.py` for unittest.
+Once the coverage run is complete, lines are highlighted in the editor for line level coverage.
+
+
+## Code formatter
+
+Black
+
+https://pypi.org/project/black/
+
+`$ black [source_file_or_directory]`
+
+Black code style:
+
+https://pypi.org/project/black/
+
+### Configuration format
+
+Black usa `pyproject.toml` que es un TOML file. La ventaja de usar este fichero es que sirve de punto de configuración para muchas de las herramientas que estoy usando: coverage, tox, black.
+
+It contains separate sections for different tools. Black is using the [tool.black] section. The option keys are the same as long names of options on the command line.
+
+Note that you have to use single-quoted strings in TOML for regular expressions. It's the equivalent of r-strings in Python. Multiline strings are treated as verbose regular expressions by Black. Use [ ] to denote a significant space character.
+
+Ver fichero
+
+```toml
+[tool.black]
+line-length = 88
+target-version = ['py36', 'py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | \.vscode
+  | _build
+  | buck-out
+  | build
+  | dist
+  | venv
+  # The following are specific to Black, you probably don't want those.
+  | blib2to3
+  | tests/data
+  | profiling
+)/
+'''
+```
+
 
 ## TOX
 
@@ -260,130 +419,6 @@ He decido hacerlo de este modo:
 
 
 El problema de esta configuración es que si un caso test falla, el empaquetado con wheel se completa de igua modo, no así el que tox crea en `.tox/dist`.
-
-
-## Code formatter
-
-Black
-
-https://pypi.org/project/black/
-
-`$ black [source_file_or_directory]`
-
-Black code style:
-
-https://pypi.org/project/black/
-
-### Configuration format
-
-Black usa `pyproject.toml` que es un TOML file. La ventaja de usar este fichero es que sirve de punto de configuración para muchas de las herramientas que estoy usando: coverage, tox, black.
-
-It contains separate sections for different tools. Black is using the [tool.black] section. The option keys are the same as long names of options on the command line.
-
-Note that you have to use single-quoted strings in TOML for regular expressions. It's the equivalent of r-strings in Python. Multiline strings are treated as verbose regular expressions by Black. Use [ ] to denote a significant space character.
-
-Ver fichero
-
-```toml
-[tool.black]
-line-length = 88
-target-version = ['py36', 'py37', 'py38']
-include = '\.pyi?$'
-exclude = '''
-/(
-    \.eggs
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | \.vscode
-  | _build
-  | buck-out
-  | build
-  | dist
-  | venv
-  # The following are specific to Black, you probably don't want those.
-  | blib2to3
-  | tests/data
-  | profiling
-)/
-'''
-```
-
-## Coverage
-
-https://coverage.readthedocs.io/en/latest
-
-`$ pip3 install coverage`
-
-`$ coverage run -m pytest`
-
-#### Data file
-Coverage.py collects execution data in a file called “.coverage”
-
-#### Sólo analizar el dir source indicado
-
-`$ coverage run --source ./src -m pytest`
-
---source creo que se ve sobreescrito por la configuración exclude o include en el fichero de configuración `.coveragerc`
-
-Como invoco coverage llamando al módulo pytest, sólo se analizan los ficheros de código que son ejecutados por los casos test.
-
-#### Excluir líneas de código
-
-https://coverage.readthedocs.io/en/latest/excluding.html
-
-Ver el fichero `.coveragerc`
-
-Puede moverse al fichero de configuración del proyecto `pyproject.toml` si se instala `coverage` de modo:
-
-https://coverage.readthedocs.io/en/latest/config.html#config
-
-`pip install coverage[toml]`
-
-
-##### para ver el report
-
-`$ coverage report`
-
-Para saber qué lineas no se han ejecutado:
-
-`$ coverage report -m`
-
-
-#### Anotar el código
-
-`$ coverage annotate -d ./coverage_annotation`
-
-Antes has de ejecutar:
-
-`$ coverage run --source ./src -m pytest`
-
-Produce un texto anotado del código fuente. Con `-d` especificamos un directorio de salida para el fichero con el código anotado. Sin `-d`, los ficheros anotados son escritos en el directorio original del fichero Python.
-
-Coverage status for each line of source is indicated with a character prefix:
-
-    > executed
-    ! missing (not executed)
-    - excluded
-
-
-Si seguimos este flujo de trabajo:
-
-`$ pytest -m b_nulo`
-
-`$ coverage run --source ./src -m pytest -m b_nulo`
-
-`$ coverage annotate -d ./coverage_annotation`
-
-conseguimos ver en las anotaciones del código sólo el **backward slice** del código que ha sido ejecutado para pasar el caso test del marker indicado.
-
-Es mejor esto que el report, ya que leo si se ha cubierto el código que estoy testeando bajo ese caso test específico.
-
-#### Echarle un ojo a la extensión pytest-cov de pytest
-
-https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
 
 
 ### eggs

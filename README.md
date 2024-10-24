@@ -194,10 +194,16 @@ https://code.visualstudio.com/docs/python/testing#_run-tests-with-coverage
 
 https://pytest-cov.readthedocs.io/en/latest/readme.html#installation
 
-Uso: 
+#### Uso:
 
 > To run tests with coverage, select the coverage run icon in the Test Explorer or “Run with coverage” from any menu you normally trigger test runs from. The Python extension will run coverage by using the `pytest-cov` plugin if you are using pytest, or with `coverage.py` for unittest.
 Once the coverage run is complete, lines are highlighted in the editor for line level coverage.
+
+DESDE CLI:
+
+`(venv) $ pytest --cov=src test/`
+
+donde `src` es el directorio con el código a testear (y medir su cobertura) y `test` el directorio con los casos test.
 
 
 ## Code formatter

@@ -57,7 +57,7 @@ En el raíz del proyecto, situar el fichero `pytest.ini` y escribir nombre del m
 
 ```ini
     [pytest]
-        markers =
+    markers =
         division_cero: coeficiente a es 0
 ```
 

@@ -9,4 +9,4 @@ def test_raiz_nula_unica():
 
 @pytest.mark.b_c_nulo
 def test_raiz_nula_unica_coeficiente_a_nulo():
-    assert raiz_ecuacion_segundo_grado(0, 0, 0) == None
+    assert raiz_ecuacion_segundo_grado(0, 0, 0) is None

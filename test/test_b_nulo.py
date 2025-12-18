@@ -11,5 +11,5 @@ def test_b_nulo_solucion_real():
 
 @pytest.mark.b_nulo
 def test_b_nulo_solucion_imaginaria():
-    assert raiz_ecuacion_segundo_grado(1, 0, 1) == None
-    assert raiz_ecuacion_segundo_grado(-1, 0, -1) == None
+    assert raiz_ecuacion_segundo_grado(1, 0, 1) is None
+    assert raiz_ecuacion_segundo_grado(-1, 0, -1) is None

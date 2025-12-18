@@ -23,7 +23,7 @@ def test_discriminante_positivo():
 
 @pytest.mark.discriminante
 def test_discriminante_negativo():
-    assert raiz_ecuacion_segundo_grado(1, 1, 1) == None
+    assert raiz_ecuacion_segundo_grado(1, 1, 1) is None
 
 
 @pytest.mark.discriminante

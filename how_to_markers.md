@@ -1,13 +1,16 @@
 
-## Working with custom markers
-### Marking test functions and selecting them for a run
+## Custom markers
+
+### Marcando funciones test y seleccionarlas para su ejecución.
+
 https://docs.pytest.org/en/latest/example/markers.html#mark-examples
 
 Dividir el código en directorio `src` y `test`
 
 En cada uno de esos dos directorios situar un fichero `__init__.py` vacío para indicar que son módulos (sic)
 
-#### Registering markers for your test suite is simple
+#### Registrar markers
+
 En el raíz del proyecto, situar el fichero `pytest.ini` y escribir nombre del marker y su descripción (opcional) tras los `:`
 
     [pytest]
@@ -25,6 +28,8 @@ def test_division_por_cero():
     assert raiz_ecuacion_segundo_grado(0, 1, 1) == None
 ```
 
+#### Seleccionar el test por marker
+
 Seleccionar el test o `marker`:
 
 ```bash
@@ -40,3 +45,14 @@ test/square_root_test.py::test_division_por_cero PASSED                         
 ================== 1 passed, 2 deselected in 0.01s ======================
 # observar que sólo ha seleccionado 1
 ```
+
+#### Seleccionar el test por nombre
+
+Empleamos `-k` para seleccionar los test según su nombre.
+
+`$ pytest -k "discriminante_cero"`
+
+O a la inversa, ejecutar todos los tests excepto este:
+
+`$ pytest -k "not discriminante_cero"`
+
